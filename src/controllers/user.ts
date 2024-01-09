@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import UserModel from '../models/user'
+import UserModel, { type UserDocument } from '../models/user'
 
 interface NewUserInput {
   email: string
@@ -12,7 +12,7 @@ interface NewUserInput {
 const saltOrRounds = 10
 const jwtSecret = process.env.JWT_SECRET
 const MAX_LOGIN_ATTEMPTS = Number(process.env.MAX_LOGIN_ATTEMPTS ?? 3)
-const LOCKOUT_DURATION = Number(process.env.LOCKOUT_DURATION ?? 300)
+const LOCKOUT_DURATION = Number(process.env.LOCKOUT_DURATION ?? 300000)
 
 const register = async ({ firstName, lastName, email, password }: NewUserInput): Promise<void> => {
   const alreadyRegistered = await UserModel.exists({ email })
@@ -75,7 +75,19 @@ const login = async ({ email, password }: LoginArgs): Promise<string | undefined
   return token
 }
 
+const getBasicInfo = async (userId?: string): Promise<Pick<UserDocument, 'firstName' | 'lastName' | 'email'>> => {
+  const user = await UserModel
+    .findOne({ _id: userId })
+    .select({ _id: 0, firstName: 1, lastName: 1, email: 1 })
+    .lean()
+
+  if (!user) throw new Error('User not found')
+
+  return user
+}
+
 export const UserController = {
+  getBasicInfo,
   login,
   register
 }
