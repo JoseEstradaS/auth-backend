@@ -27,4 +27,21 @@ router.post('/register', async (req: Request, res: Response) => {
   }
 })
 
+router.post('/login', async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body
+
+    const token = await UserController.login({
+      email,
+      password
+    })
+
+    res.json({ success: true, message: 'User loged', data: { token } })
+  } catch (error: any) {
+    return res
+      .status(500)
+      .json({ success: false, message: error.message })
+  }
+})
+
 export default router

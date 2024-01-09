@@ -6,6 +6,7 @@ export interface UserDocument extends Document {
   lastName: string
   password: string
   loginAttempts: number
+  lockoutEndAt: Date
 }
 
 const userSchema = new Schema<UserDocument>({
@@ -13,7 +14,8 @@ const userSchema = new Schema<UserDocument>({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   password: { type: String, required: true },
+  lockoutEndAt: { type: Date },
   loginAttempts: { type: Number, default: 0 }
-})
+}, { timestamps: true })
 
 export default mongoose.model<UserDocument>('User', userSchema)
