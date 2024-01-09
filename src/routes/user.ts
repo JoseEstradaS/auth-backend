@@ -1,8 +1,9 @@
 import express, { type Request, type Response } from 'express'
+import { auth } from '../middlewares/authorization'
 
 const router = express.Router()
 
-router.get('/', (req: Request, res: Response) => {
+router.get('/info', auth, (req: Request, res: Response) => {
   res.send('List of users')
 })
 

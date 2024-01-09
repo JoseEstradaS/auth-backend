@@ -9,5 +9,12 @@
     "sourceType": "module"
   },
   "rules": {
+    "@typescript-eslint/strict-boolean-expressions": ["error", { "allowNullableString": true }],
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      {
+        "checksVoidReturn": false
+      }
+    ]
   }
 }
