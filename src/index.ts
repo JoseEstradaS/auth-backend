@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use('/api/v1', apiRouter)
 
 app.get('/', (_, res) => {
-  res.send('Hello, this is your Express server!')
+  res.send('Hello, this is your Express server')
 })
 
 app.listen(PORT, () => {
